@@ -132,7 +132,7 @@ class Spiderling:
                 elif not self.local:
                     log.info(f'{self.target}: {file.share}\\{file.name} ({bytes_to_human(file.size)})')
                     if not self.parent.no_download:
-                        self.save_file(file)
+                        self.(file)
 
         log.info(f'Finished spidering {self.target}')
 
@@ -178,7 +178,7 @@ class Spiderling:
             if type(file) == RemoteFile:
                 matches = self.parent.parser.parse_file(str(file.tmp_filename), pretty_filename=str(file))
                 if matches and not self.parent.no_download:
-                    self.save_file(file)
+                    self.(file)
                 else:
                     file.tmp_filename.unlink()
 
@@ -281,7 +281,7 @@ class Spiderling:
                                 # don't parse it, instead save it and continue
                                 log.info(f'{self.target}: {remote_file.share}\\{remote_file.name}')
                                 if self.get_file(remote_file):
-                                    self.save_file(remote_file)
+                                    self.(remote_file)
                                     continue
 
                         # file is ready to be parsed
@@ -442,8 +442,8 @@ class Spiderling:
         loot_dest = self.parent.loot_dir / loot_filename
         try:
             move(str(remote_file.tmp_filename), str(loot_dest))
-        except Exception:
-            log.warning(f'Error saving {remote_file}')
+        except Exception as e:
+             log.warning(f'Error saving {remote_file}: {e}')
 
 
     def get_file(self, remote_file):
